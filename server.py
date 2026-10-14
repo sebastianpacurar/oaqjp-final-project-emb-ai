@@ -13,7 +13,11 @@ def root_path():
 def get_emotion():
     input_text = request.args.get("textToAnalyze")
     emotions = emotion_detector(input_text)
-    dominant_emotion = emotions.get("dominant_emotion")
+    dominant_emotion = emotions.get("dominant_emotion", None)
+
+    if dominant_emotion is None:
+        return "Invalid text! Please try again!"
+
     emotions.pop("dominant_emotion")
     input_formatted = ", ".join(f"'{k}': {v}" for k, v in emotions.items())
     return f"For the given statement, the system response is {input_formatted}. The dominant emotion is {dominant_emotion}."
